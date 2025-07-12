@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Buyer Dashboard | GreenMarket</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <div class="min-h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-green-700 text-white hidden md:block">
+      <div class="p-6">
+        <div class="flex items-center space-x-2">
+          <img src="{% static 'images/logo.png' %}" alt="Logo" class="h-8 w-8">
+          <h1 class="text-xl font-bold">Buyer Panel</h1>
+        </div>
+        <nav class="mt-8 space-y-4">
+          <a href="#" class="block px-4 py-2 rounded hover:bg-green-600">Dashboard</a>
+          <a href="#" class="block px-4 py-2 rounded hover:bg-green-600">My Orders</a>
+          <a href="#" class="block px-4 py-2 rounded hover:bg-green-600">Profile</a>
+          <a href="#" class="block px-4 py-2 rounded hover:bg-green-600">Logout</a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col">
+
+      <!-- Topbar -->
+      <header class="bg-white shadow px-6 py-4 flex items-center justify-between">
+        <h2 class="text-xl font-semibold text-gray-800">Welcome, Buyer</h2>
+        <div class="flex items-center space-x-4">
+          <span class="text-sm text-gray-700">John Buyer</span>
+          <img src="{% static 'images/avatar.png' %}" alt="Avatar" class="h-8 w-8 rounded-full">
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <main class="p-6">
+
+        <!-- Stats Cards -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div class="bg-white p-4 rounded-lg shadow">
+            <h3 class="text-sm text-gray-500">Total Orders</h3>
+            <p class="text-2xl font-bold text-green-700 mt-2">24</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow">
+            <h3 class="text-sm text-gray-500">Delivered</h3>
+            <p class="text-2xl font-bold text-green-700 mt-2">19</p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow">
+            <h3 class="text-sm text-gray-500">Pending</h3>
+            <p class="text-2xl font-bold text-yellow-600 mt-2">5</p>
+          </div>
+        </div>
+
+        <!-- Recent Orders Table -->
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Recent Orders</h3>
+          <div class="bg-white rounded shadow overflow-x-auto">
+            <table class="min-w-full text-sm text-left">
+              <thead class="bg-green-600 text-white text-xs uppercase">
+                <tr>
+                  <th class="px-6 py-3">#</th>
+                  <th class="px-6 py-3">Product</th>
+                  <th class="px-6 py-3">Date</th>
+                  <th class="px-6 py-3">Status</th>
+                  <th class="px-6 py-3">Amount</th>
+                </tr>
+              </thead>
+              <tbody class="text-gray-700">
+                <tr class="border-b">
+                  <td class="px-6 py-4">1</td>
+                  <td class="px-6 py-4">Fresh Tomatoes</td>
+                  <td class="px-6 py-4">July 10, 2025</td>
+                  <td class="px-6 py-4"><span class="text-yellow-600 font-medium">Pending</span></td>
+                  <td class="px-6 py-4">₦2,000</td>
+                </tr>
+                <tr class="border-b">
+                  <td class="px-6 py-4">2</td>
+                  <td class="px-6 py-4">Yam Tubers</td>
+                  <td class="px-6 py-4">July 5, 2025</td>
+                  <td class="px-6 py-4"><span class="text-green-600 font-medium">Delivered</span></td>
+                  <td class="px-6 py-4">₦5,500</td>
+                </tr>
+                <tr>
+                  <td class="px-6 py-4">3</td>
+                  <td class="px-6 py-4">Red Pepper</td>
+                  <td class="px-6 py-4">July 1, 2025</td>
+                  <td class="px-6 py-4"><span class="text-green-600 font-medium">Delivered</span></td>
+                  <td class="px-6 py-4">₦1,200</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+
+    </div>
+  </div>
+
+</body>
+</html>

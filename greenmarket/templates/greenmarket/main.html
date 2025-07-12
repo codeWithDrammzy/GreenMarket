@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Farmer Dashboard | GreenMarket</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+<div class="min-h-screen flex">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-green-800 text-white hidden md:block">
+    <div class="p-6">
+      <div class="flex items-center space-x-2">
+        <img src="{% static 'images/logo.png' %}" alt="Logo" class="h-8 w-8">
+        <span class="text-xl font-bold">Farmer Panel</span>
+      </div>
+      <nav class="mt-8 space-y-4 text-sm">
+        <a href="{% url 'dashboard' %}" class="block px-4 py-2 rounded hover:bg-green-700">Dashboard</a>
+        <a href="{% url 'product-list' %}" class="block px-4 py-2 rounded hover:bg-green-700">My Products</a>
+        <a href="{% url 'add-product' %}" class="block px-4 py-2 rounded hover:bg-green-700">Add Product</a>
+        <a href="#" class="block px-4 py-2 rounded hover:bg-green-700">Orders</a>
+        <a href="#" class="block px-4 py-2 rounded hover:bg-green-700">Messages</a>
+        <a href="#" class="block px-4 py-2 rounded hover:bg-green-700">Profile</a>
+        <a href="#" class="block px-4 py-2 rounded hover:bg-green-700">Logout</a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col">
+    
+    <!-- Topbar -->
+    <header class="bg-white shadow px-6 py-4 flex items-center justify-between">
+      <h2 class="text-xl font-semibold">Welcome, Musa G.</h2>
+      <div class="flex items-center space-x-3">
+        <span class="text-sm">Farmer</span>
+        <img src="{% static 'images/avatar.png' %}" alt="Avatar" class="h-8 w-8 rounded-full">
+      </div>
+    </header>
+
+    <!-- Content -->
+     {% block content  %}
+
+
+
+     {% endblock  %}
+    
+
+  </div>
+</div>
+
+</body>
+</html>

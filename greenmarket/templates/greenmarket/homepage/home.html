@@ -1,0 +1,116 @@
+{% extends "greenmarket/base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+
+<!-- Hero Section -->
+<section class="bg-green-100 py-20 text-center px-4">
+  <h1 class="text-4xl md:text-5xl font-bold text-green-800">Buy Fresh Farm Products Direct from Local Farmers</h1>
+  <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-700">Support local farmers and get organic, quality produce straight from the farm to your table.</p>
+  <div class="mt-6 space-x-4">
+    <a href="#" class="bg-green-700 text-white px-6 py-3 rounded hover:bg-green-800">Start Shopping</a>
+    <a href="#" class="bg-white text-green-700 border border-green-700 px-6 py-3 rounded hover:bg-green-50">List Your Products</a>
+  </div>
+</section>
+
+
+
+<!-- Featured Products -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4">
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-10">Featured Products</h2>
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+      <!-- Product Card -->
+      <div class="bg-white rounded shadow hover:shadow-md transition">
+        <img src="{% static 'images/logo-farm.jpeg' %}" alt="Tomatoes" class="w-full h-40 object-cover rounded-t">
+        <div class="p-4">
+          <h3 class="text-lg font-semibold">Organic Tomatoes</h3>
+          <p class="text-green-700 font-bold">₦2,000 / basket</p>
+          <p class="text-sm text-gray-600">Green Farm, Kaduna</p>
+          <button class="mt-3 bg-green-600 text-white w-full py-2 rounded hover:bg-green-700">Add to Cart</button>
+        </div>
+      </div>
+
+       <div class="bg-white rounded shadow hover:shadow-md transition">
+        <img src="{% static 'images/logo-farm.jpeg' %}" alt="Tomatoes" class="w-full h-40 object-cover rounded-t">
+        <div class="p-4">
+          <h3 class="text-lg font-semibold">Organic Tomatoes</h3>
+          <p class="text-green-700 font-bold">₦2,000 / basket</p>
+          <p class="text-sm text-gray-600">Green Farm, Kaduna</p>
+          <button class="mt-3 bg-green-600 text-white w-full py-2 rounded hover:bg-green-700">Add to Cart</button>
+        </div>
+      </div>
+
+       <div class="bg-white rounded shadow hover:shadow-md transition">
+        <img src="{% static 'images/logo-farm.jpeg' %}" alt="Tomatoes" class="w-full h-40 object-cover rounded-t">
+        <div class="p-4">
+          <h3 class="text-lg font-semibold">Organic Tomatoes</h3>
+          <p class="text-green-700 font-bold">₦2,000 / basket</p>
+          <p class="text-sm text-gray-600">Green Farm, Kaduna</p>
+          <button class="mt-3 bg-green-600 text-white w-full py-2 rounded hover:bg-green-700">Add to Cart</button>
+        </div>
+      </div>
+       <div class="bg-white rounded shadow hover:shadow-md transition">
+        <img src="{% static 'images/logo-farm.jpeg' %}" alt="Tomatoes" class="w-full h-40 object-cover rounded-t">
+        <div class="p-4">
+          <h3 class="text-lg font-semibold">Organic Tomatoes</h3>
+          <p class="text-green-700 font-bold">₦2,000 / basket</p>
+          <p class="text-sm text-gray-600">Green Farm, Kaduna</p>
+          <button class="mt-3 bg-green-600 text-white w-full py-2 rounded hover:bg-green-700">Add to Cart</button>
+        </div>
+      </div>
+      
+      <!-- More product cards can be added here -->
+
+    </div>
+    <div class="text-center mt-8">
+      <a href="#" class="text-green-700 underline">Browse all products →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-16 bg-white">
+  <div class="max-w-6xl mx-auto text-center px-4">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Why Choose GreenMarket?</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="p-4">
+        <div class="text-4xl mb-2">🌱</div>
+        <h3 class="text-lg font-semibold">Local & Organic</h3>
+        <p class="text-sm text-gray-600">All produce is sourced directly from trusted local farmers.</p>
+      </div>
+      <div class="p-4">
+        <div class="text-4xl mb-2">🚚</div>
+        <h3 class="text-lg font-semibold">Fast Delivery</h3>
+        <p class="text-sm text-gray-600">Freshness guaranteed with same-day delivery options.</p>
+      </div>
+      <div class="p-4">
+        <div class="text-4xl mb-2">🤝</div>
+        <h3 class="text-lg font-semibold">Farmer Direct</h3>
+        <p class="text-sm text-gray-600">No middlemen — connect and deal directly with farmers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action Banner -->
+<section class="bg-green-600 text-white text-center py-12">
+  <h2 class="text-2xl font-semibold">Join GreenMarket Today</h2>
+  <p class="mt-2">Whether you're a farmer or a buyer, we have a place for you.</p>
+  <div class="mt-4">
+    <a href="#" class="bg-white text-green-700 px-6 py-3 rounded hover:bg-green-100">Get Started</a>
+  </div>
+</section>
+
+
+
+{% endblock  %}
+
+
+
+
+
+

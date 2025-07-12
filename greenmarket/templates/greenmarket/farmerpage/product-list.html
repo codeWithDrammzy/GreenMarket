@@ -1,0 +1,84 @@
+{% extends "greenmarket/main.html" %}
+{% load static %}
+
+{% block content %}
+
+<main class="p-6">
+
+  <!-- Heading + Add Button -->
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-semibold">My Products</h2>
+    <a href="#" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">+ Add Product</a>
+  </div>
+
+  <!-- Products Table -->
+  <div class="bg-white shadow rounded-lg overflow-x-auto">
+    <table class="min-w-full text-sm text-left">
+      <thead class="bg-green-700 text-white uppercase text-xs">
+        <tr>
+          <th class="px-6 py-3">#</th>
+          <th class="px-6 py-3">Image</th>
+          <th class="px-6 py-3">Name</th>
+          <th class="px-6 py-3">Price</th>
+          <th class="px-6 py-3">Stock</th>
+          <th class="px-6 py-3">Status</th>
+          <th class="px-6 py-3 text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+
+        <!-- Row 1 -->
+        <tr class="border-b">
+          <td class="px-6 py-4">1</td>
+          <td class="px-6 py-4">
+            <img src="{% static 'images/tomato.jpg' %}" class="h-12 w-12 rounded object-cover" alt="Tomatoes">
+          </td>
+          <td class="px-6 py-4 font-semibold">Fresh Tomatoes</td>
+          <td class="px-6 py-4">₦2,000 / basket</td>
+          <td class="px-6 py-4">23</td>
+          <td class="px-6 py-4"><span class="text-green-600 font-medium">Active</span></td>
+          <td class="px-6 py-4 text-center space-x-2">
+            <a href="#" class="text-blue-600 hover:underline">Edit</a>
+            <a href="#" class="text-red-600 hover:underline">Delete</a>
+          </td>
+        </tr>
+
+        <!-- Row 2 -->
+        <tr class="border-b">
+          <td class="px-6 py-4">2</td>
+          <td class="px-6 py-4">
+            <img src="{% static 'images/yam.jpg' %}" class="h-12 w-12 rounded object-cover" alt="Yam">
+          </td>
+          <td class="px-6 py-4 font-semibold">Yam Tubers</td>
+          <td class="px-6 py-4">₦5,500 / 5pcs</td>
+          <td class="px-6 py-4">10</td>
+          <td class="px-6 py-4"><span class="text-yellow-600 font-medium">Low Stock</span></td>
+          <td class="px-6 py-4 text-center space-x-2">
+            <a href="#" class="text-blue-600 hover:underline">Edit</a>
+            <a href="#" class="text-red-600 hover:underline">Delete</a>
+          </td>
+        </tr>
+
+        <!-- Row 3 -->
+        <tr>
+          <td class="px-6 py-4">3</td>
+          <td class="px-6 py-4">
+            <img src="{% static 'images/pepper.jpg' %}" class="h-12 w-12 rounded object-cover" alt="Pepper">
+          </td>
+          <td class="px-6 py-4 font-semibold">Red Pepper</td>
+          <td class="px-6 py-4">₦1,200 / bag</td>
+          <td class="px-6 py-4">36</td>
+          <td class="px-6 py-4"><span class="text-green-600 font-medium">Active</span></td>
+          <td class="px-6 py-4 text-center space-x-2">
+            <a href="#" class="text-blue-600 hover:underline">Edit</a>
+            <a href="#" class="text-red-600 hover:underline">Delete</a>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+{% endblock content %}
