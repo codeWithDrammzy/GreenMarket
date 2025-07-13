@@ -1,23 +1,56 @@
-from django.shortcuts import render
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
+from .forms import*
 
 # home
 def home(request):
     return render(request, ('greenmarket/homepage/home.html'))
 
-# about
+# login
 def my_login(request):
-    return render(request, ('greenmarket/homepage/my-login.html'))
+    form = LoginForm()
+    if request.method == 'POST':
+        form = LoginForm(request, data=request.POST)
+        if form.is_valid():
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+
+            user = authenticate(request, username=username, password=password)
+            if user:
+                login(request, user)  # ✅ this logs the user in
+                return redirect('dashboard')  # ✅ redirects to dashboard
+            else:
+                form.add_error(None, "Invalid username or password")  # optional user feedback
+
+    context = {'form': form}
+    return render(request, 'greenmarket/homepage/my-login.html', context)
 
 # registration 
-
 def registration_page(request):
-    return render(request, 'greenmarket/homepage/registration-page.html')
 
+    form = UserCreationForm()
+    if request.method =="POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect ('my-login')
+    
+    context = {'form': form}
+
+    return render(request, 'greenmarket/homepage/registration-page.html', context)
+
+# logout
+def my_logout(request):
+    logout(request)
+    return redirect(home)
 
 
 # ================== Farmer views ================
 #  dashboard
+@login_required(login_url='my-login')
 def farmers_dasboard(request):
+
     return render(request, 'greenmarket/farmerpage/dashboard.html')
 
 # prodict list

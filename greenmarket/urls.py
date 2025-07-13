@@ -5,6 +5,7 @@ urlpatterns = [
     path('', views.home, name=''),
 
     path('my-login', views.my_login, name='my-login'),
+    path('my-logout', views.my_logout, name='my-logout'),
     path('registration-page', views.registration_page, name='registration-page'),
 
     # =========== Farmer url===========
