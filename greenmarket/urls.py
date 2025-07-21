@@ -2,14 +2,15 @@ from django.urls import path
 from .import views
 
 urlpatterns = [
-    path('', views.home, name=''),
+    path('', views.home, name='home'),
 
-    path('my-login', views.my_login, name='my-login'),
+    path('login', views.my_login, name='login'),  # rename the name
+
     path('my-logout', views.my_logout, name='my-logout'),
-    path('registration-page', views.registration_page, name='registration-page'),
+    path('register-page', views.registration_page, name='register-page'),
 
     # =========== Farmer url===========
-    path('dashboard', views.farmers_dasboard, name='dashboard'),
+    path('dashboard', views.farmers_dashboard, name='dashboard'),
     path('product-list', views.product_list, name='product-list'),
     path('add-product', views.add_product, name='add-product'),
 

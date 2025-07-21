@@ -28,11 +28,11 @@
       
         <!-- Row 1 -->
         <tr class="border-b">
-          <td class="px-6 py-4"> {{p.id}}  </td>
+          <td class="px-6 py-4"> {{forloop.counter}}  </td>
           
-          <td class="px-6 py-4 font-semibold"> {{p.product_name|upper}} </td>
-          <td class="px-6 py-4 font-semibold"> {{p.product_price}} </td>
-          <td class="px-6 py-4"> {{p.product_description|title}} </td>
+          <td class="px-6 py-4 font-semibold"> {{p.name|upper}} </td>
+          <td class="px-6 py-4 font-semibold"> {{p.price}} </td>
+          <td class="px-6 py-4"> {{p.description|title}} </td>
           <td class="px-6 py-4 text-center space-x-2">
             <a href="#" class="text-blue-600 hover:underline">View Info</a>
             

@@ -1,39 +1,61 @@
 from django.db import models
+from django.contrib.auth.models import User
 
+# ----------------------------
+# Farmer Model
+# ----------------------------
 class FarmerModel(models.Model):
     USER_TYPE_CHOICES = (
         ('farmer', 'Farmer'),
+    )
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default='farmer')
+    phone = models.CharField(max_length=15, blank=True)
+    location = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}"
+
+
+# ----------------------------
+# Buyer Model
+# ----------------------------
+class BuyerModel(models.Model):
+    USER_TYPE_CHOICES = (
         ('buyer', 'Buyer'),
     )
 
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES)
-    email = models.EmailField(unique=True)
-    pass1 = models.CharField(max_length=128)
-    pass2 = models.CharField(max_length=128)  # Not recommended for production
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default='buyer')
+    phone = models.CharField(max_length=15, blank=True)
 
     def __str__(self):
-        return f"{self.first_name} ({self.user_type})"
+        return f"{self.user.first_name} {self.user.last_name}"
 
-from django.db import models
 
-class FarmProduct(models.Model):  # <-- You need this
-    Category_Choice = (
+# ----------------------------
+# Product Model
+# ----------------------------
+class Product(models.Model):
+    CATEGORY_CHOICES = (
         ('fruit', 'Fruit'),
-        ('grains', 'Grains'),
-        ('vegetables', 'Vegetables'),
-        ('legumes', 'Legumes'),
-        ('nuts', 'Nuts & Seeds'),
-        ('spices', 'Spices & Herbs'),
-        ('beverages', 'Beverages'),
-        ('others', 'Others'),
+        ('grain', 'Grain'),
+        ('vegetable', 'Vegetable'),
+        ('legume', 'Legume'),
+        ('spice', 'Spice'),
+        ('nut', 'Nuts & Seeds'),
+        ('beverage', 'Beverage'),
+        ('other', 'Other'),
     )
 
-    product_name = models.CharField(max_length=50)
-    product_price = models.CharField(max_length=50)
-    product_category = models.CharField(choices=Category_Choice, max_length=50)
-    product_description = models.CharField(max_length=50)
+    farmer = models.ForeignKey(FarmerModel, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    description = models.TextField(blank=True)
+    
+    date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.product_name} ({self.product_price})"
+        return f"{self.name} - {self.farmer.user.first_name}"

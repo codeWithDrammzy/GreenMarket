@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import*
-admin.site.register(FarmerModel)
-admin.site.register(FarmProduct)
+from .models import FarmerModel, BuyerModel, Product
 
-# Register your models here.
+admin.site.register(FarmerModel)
+admin.site.register(BuyerModel)
+admin.site.register(Product)

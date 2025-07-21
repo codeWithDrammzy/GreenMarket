@@ -17,19 +17,31 @@
     <p class="text-center text-gray-500 mb-6 text-sm">Login to your GreenMarket account</p>
 
     <!-- Login Form (Dummy Data) -->
-    <form method="POST">
-      {% csrf_token %}
-      {{form|crispy}}
-      
-      <!-- Submit -->
-      <button type="submit"
-        class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Login</button>
-    </form>
+    <!-- Login Form (Dummy Data) -->
+<form method="POST">
+  {% csrf_token %}
+  
+  
+  {% if messages %}
+    {% for message in messages %}
+      <div class="mb-4 text-red-600 text-sm text-center">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+  
+  {{ form|crispy }}
+  
+  <!-- Submit -->
+  <button type="submit"
+    class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Login</button>
+</form>
+
 
     <!-- Links -->
     <div class="mt-5 text-center text-sm">
       <p class="text-gray-600">Don't have an account? 
-        <a href="{% url 'registration-page' %}" class="text-green-700 font-medium hover:underline">Register</a>
+        <a href="{% url 'register-page' %}" class="text-green-700 font-medium hover:underline">Register</a>
       </p>
       <p class="mt-2">
         <a href="#" class="text-gray-500 hover:underline">Forgot password?</a>

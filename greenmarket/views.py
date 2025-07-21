@@ -1,99 +1,131 @@
+from django.shortcuts import render, redirect, HttpResponse
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
-from .forms import*
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
+from .models import*
+from .forms import*
 
-# home
-def home(request):
-    return render(request, ('greenmarket/homepage/home.html'))
+# ===================== Authentication Views =====================
+
+def registration_page(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            email = form.cleaned_data['email']
+            password1 = form.cleaned_data['password1']
+            password2 = form.cleaned_data['password2']
+            user_type = form.cleaned_data['user_type']
+
+            if password1 != password2:
+                messages.error(request, "Passwords do not match.")
+                return render(request, 'greenmarket/homepage/register-page.html', {'form': form})
+
+            if User.objects.filter(username=email).exists():
+                messages.error(request, "User with this email already exists.")
+                return render(request, 'greenmarket/homepage/register-page.html', {'form': form})
+
+            user = User.objects.create_user(
+                username=email,
+                email=email,
+                first_name=first_name,
+                last_name=last_name,
+                password=password1
+            )
+
+            if user_type == 'farmer':
+                FarmerModel.objects.create(user=user, user_type='farmer')
+            elif user_type == 'buyer':
+                BuyerModel.objects.create(user=user, user_type='buyer')
+
+            messages.success(request, "Registration successful. Please log in.")
+            return redirect('login')
+    else:
+        form = UserRegistrationForm()
+
+    return render(request, 'greenmarket/homepage/register-page.html', {'form': form})
 
 
 def my_login(request):
     form = LoginForm()
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
 
-            # Use .filter().first() instead of try/except
-            user = User.objects.filter(email=email).first()
-            
-            if user:
-                # Authenticate using the username
-                user = authenticate(request, username=user.username, password=password)
-                if user:
-                    login(request, user)
+            try:
+                user_obj = User.objects.get(email=email)
+                user = authenticate(request, username=user_obj.username, password=password)
+            except User.DoesNotExist:
+                user = None
+
+            if user is not None:
+                login(request, user)
+
+                if user.is_superuser: 
+                    return redirect('/admin/')
+                elif hasattr(user, 'farmermodel') and user.farmermodel.user_type == "farmer":
                     return redirect('dashboard')
+                elif hasattr(user, 'buyermodel') and user.buyermodel.user_type == "buyer":
+                    return redirect('buyer-dashboard')
                 else:
-                    form.add_error(None, "Invalid email or password")
+                    messages.error(request, "User role not recognized.")
+                    return redirect('login')
             else:
-                form.add_error(None, "No account found with that email")
+                messages.error(request, "Invalid login credentials")
 
-    return render(request, 'greenmarket/homepage/my-login.html', {'form': form})
+    return render(request, 'greenmarket/homepage/login.html', {'form': form})
 
 
-def registration_page(request):
-    form = FarmerRegistrationForm()
-    if request.method == "POST":
-        form = FarmerRegistrationForm(request.POST)
-        if form.is_valid():
-            first = form.cleaned_data['first_name']
-            last = form.cleaned_data['last_name']
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['pass1']
-            user_type = form.cleaned_data['user_type']  # not used yet, just collected
-
-            # ✅ Manually create the user in Django's User model
-            user = User.objects.create_user(
-                username=email,
-                first_name=first,
-                last_name=last,
-                email=email,
-                password=password
-            )
-
-            return redirect('my-login')
-
-    return render(request, 'greenmarket/homepage/registration-page.html', {'form': form})
-
-# logout
 def my_logout(request):
     logout(request)
-    return redirect(home)
+    return redirect('home')
 
 
-# ================== Farmer views ================
-#  dashboard
-@login_required(login_url='my-login')
-def farmers_dasboard(request):
+# ===================== Home View =====================
 
+def home(request):
+    return render(request, 'greenmarket/homepage/home.html')
+
+
+# ===================== Farmer Views =====================
+
+@login_required(login_url='login')
+def farmers_dashboard(request):
     return render(request, 'greenmarket/farmerpage/dashboard.html')
 
-# prodict list
+
+@login_required(login_url='login')
 def product_list(request):
-    products = FarmProduct.objects.all()
+    products = Product.objects.filter(farmer=request.user.farmermodel)
+    return render(request, 'greenmarket/farmerpage/product-list.html', {'products': products})
 
-    context = {'products':products}
-    return render(request, 'greenmarket/farmerpage/product-list.html', context)
 
-# add product
+
+@login_required(login_url='login')
 def add_product(request):
     form = ProductForm()
     if request.method == "POST":
         form = ProductForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('product-list')
-    context ={'form':form}
-            
-    return render(request, 'greenmarket/farmerpage/add-product.html', context)
+            product = form.save(commit=False)
+            try:
+                farmer = FarmerModel.objects.get(user=request.user)
+                product.farmer = farmer  # 🟢 this is the actual foreign key
+                product.save()
+                return redirect('product-list')
+            except FarmerModel.DoesNotExist:
+                return HttpResponse("Only farmers can add products.")
+    return render(request, 'greenmarket/farmerpage/add-product.html', {'form': form})
 
+# ===================== Buyer Views =====================
 
-# ============= Buyer views =============
-# dashboard
+@login_required(login_url='login')
 def buyer_dashboard(request):
     return render(request, 'greenmarket/buyerpage/buyer-dashboard.html')
