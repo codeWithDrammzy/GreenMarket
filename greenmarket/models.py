@@ -54,6 +54,7 @@ class Product(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True)
+    avater = models.ImageField(upload_to='productIMG/', blank=True , null= True)
     
     date_added = models.DateTimeField(auto_now_add=True)
 

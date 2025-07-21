@@ -1,0 +1,52 @@
+{% extends "greenmarket/main.html" %}
+{% load static %}
+
+{% block content %}
+<main class="p-6 p-8 m-20 bg-white rounded-lg shadow">
+
+  <h2 class="text-2xl font-bold text-green-700 mb-8">My Orders</h2>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200 border rounded-md">
+      <thead class="bg-green-100">
+        <tr>
+          <th class="px-6 py-3 text-left text-sm font-medium text-green-700">#</th>
+          <th class="px-6 py-3 text-left text-sm font-medium text-green-700">Product</th>
+          <th class="px-6 py-3 text-left text-sm font-medium text-green-700">Quantity</th>
+          <th class="px-6 py-3 text-left text-sm font-medium text-green-700">Date</th>
+          <th class="px-6 py-3 text-left text-sm font-medium text-green-700">Buyer</th>
+          <th class="px-6 py-3 text-left text-sm font-medium text-green-700">Status</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100 bg-white text-sm text-gray-700">
+        <tr>
+          <td class="px-6 py-4">1</td>
+          <td class="px-6 py-4">Fresh Mangoes</td>
+          <td class="px-6 py-4">10</td>
+          <td class="px-6 py-4">21 July 2025</td>
+          <td class="px-6 py-4">john_doe</td>
+          <td class="px-6 py-4">complate</td>
+
+        </tr>
+        <tr>
+          <td class="px-6 py-4">2</td>
+          <td class="px-6 py-4">Organic Tomatoes</td>
+          <td class="px-6 py-4">25</td>
+          <td class="px-6 py-4">21 July 2025</td>
+          <td class="px-6 py-4">amina_sule</td>
+          <td class="px-6 py-4">pending</td>
+        </tr>
+        <tr>
+          <td class="px-6 py-4">3</td>
+          <td class="px-6 py-4">Brown Rice</td>
+          <td class="px-6 py-4">5</td>
+          <td class="px-6 py-4">21 July 2025</td>
+          <td class="px-6 py-4">umar_farouq</td>
+          <td class="px-6 py-4">complate</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+{% endblock content %}

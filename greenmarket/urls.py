@@ -13,6 +13,9 @@ urlpatterns = [
     path('dashboard', views.farmers_dashboard, name='dashboard'),
     path('product-list', views.product_list, name='product-list'),
     path('add-product', views.add_product, name='add-product'),
+    path('product-info/<int:pk>', views.product_info, name='product-info'),
+    path('delete-product/<int:pk>', views.delete_product, name='delete-product'),
+    path('farm-orders', views.farm_orders, name='farm-orders'),
 
     # ============ Buyer page ===========
 

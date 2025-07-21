@@ -98,7 +98,10 @@ def home(request):
 
 @login_required(login_url='login')
 def farmers_dashboard(request):
-    return render(request, 'greenmarket/farmerpage/dashboard.html')
+    farmer = request.user.farmermodel   
+    farm_items = Product.objects.filter(farmer= farmer).count()
+    context = {'farm_items':farm_items}
+    return render(request, 'greenmarket/farmerpage/dashboard.html',context)
 
 
 @login_required(login_url='login')
@@ -112,7 +115,7 @@ def product_list(request):
 def add_product(request):
     form = ProductForm()
     if request.method == "POST":
-        form = ProductForm(request.POST)
+        form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             product = form.save(commit=False)
             try:
@@ -123,6 +126,23 @@ def add_product(request):
             except FarmerModel.DoesNotExist:
                 return HttpResponse("Only farmers can add products.")
     return render(request, 'greenmarket/farmerpage/add-product.html', {'form': form})
+
+@login_required(login_url='login')
+def product_info(request, pk):
+    product= Product.objects.get(id=pk)
+    context = {'product': product}
+    return render(request, 'greenmarket/farmerpage/product-info.html', context)
+
+@login_required(login_url='login')
+def delete_product(request, pk):
+    product =Product.objects.get(id= pk)
+    product.delete()
+    return redirect('product-list')
+
+@login_required(login_url='login')
+def farm_orders(request):
+    return render(request, 'greenmarket/farmerpage/farm-order.html')
+
 
 # ===================== Buyer Views =====================
 

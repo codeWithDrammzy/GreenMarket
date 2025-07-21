@@ -1,0 +1,62 @@
+{% extends "greenmarket/main.html" %}
+{% load static %}
+
+{% block content %}
+
+<main class="py-10 px-4 bg-gray-100 min-h-screen">
+  <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
+
+    <!-- Product Image -->
+    {% if product.avater %}
+      <div class="h-64 w-full overflow-hidden">
+        <img src="{{ product.avater.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+      </div>
+    {% else %}
+      <div class="h-64 w-full bg-gray-100 flex items-center justify-center text-gray-500">
+        <span>No Product Image</span>
+      </div>
+    {% endif %}
+
+    <!-- Product Details -->
+    <div class="p-6 space-y-4 text-gray-800">
+      <h1 class="text-3xl font-bold text-green-700">{{ product.name|title }}</h1>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <p class="text-sm text-gray-500">Category</p>
+          <p class="font-semibold text-gray-800">{{ product.get_category_display }}</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">Price</p>
+          <p class="font-semibold text-green-700 text-xl">₦{{ product.price }}</p>
+        </div>
+        <div class="col-span-2">
+          <p class="text-sm text-gray-500">Description</p>
+          <p class="text-gray-700 whitespace-pre-line">{{ product.description }}</p>
+        </div>
+        <div class="col-span-2">
+          <p class="text-sm text-gray-500">Date Added</p>
+          <p class="text-gray-600">{{ product.date_added|date:"F j, Y, g:i a" }}</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="mt-6 flex justify-between flex-wrap gap-3">
+        <a href="{% url 'product-list' %}" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">
+          ← Back to My Products
+        </a>
+        <div class="flex gap-3">
+          <a href="" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            ✏️ Edit
+          </a>
+          <a href="{% url 'delete-product' product.id %}" onclick="return confirm('Are you sure you want to delete this product?');" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+            🗑️ Delete
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+{% endblock content %}

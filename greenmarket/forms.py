@@ -38,5 +38,5 @@ class LoginForm(forms.Form):
 # -------------------------------
 class ProductForm(forms.ModelForm):
     class Meta:
-        model = Product  # or FarmProduct
-        fields = ['name', 'category', 'price', 'description']
+        model = Product
+        exclude = ['farmer']
