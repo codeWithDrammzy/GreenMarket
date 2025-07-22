@@ -91,7 +91,9 @@ def my_logout(request):
 # ===================== Home View =====================
 
 def home(request):
-    return render(request, 'greenmarket/homepage/home.html')
+    items = Product.objects.all().order_by('-date_added')[:4]
+    context = {'items':items}
+    return render(request, 'greenmarket/homepage/home.html', context)
 
 
 # ===================== Farmer Views =====================
@@ -149,3 +151,13 @@ def farm_orders(request):
 @login_required(login_url='login')
 def buyer_dashboard(request):
     return render(request, 'greenmarket/buyerpage/buyer-dashboard.html')
+
+@login_required(login_url='login')
+def market_place(request):
+    items = Product.objects.all().order_by('-date_added')
+    context = {'items':items}
+    return render(request, 'greenmarket/buyerpage/market-place.html', context)
+
+@login_required(login_url='login')
+def my_order(request):
+    return render(request, 'greenmarket/buyerpage/my-order.html')

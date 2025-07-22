@@ -19,7 +19,9 @@ urlpatterns = [
 
     # ============ Buyer page ===========
 
-    path('buyer-dashboard', views.buyer_dashboard, name='buyer-dashboard')
+    path('buyer-dashboard', views.buyer_dashboard, name='buyer-dashboard'),
+    path('market-place', views.market_place, name='market-place'),
+    path('my-order', views.my_order, name='my-order'),
     
 
 ]
