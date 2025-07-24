@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Product  # Or FarmProduct
+from .models import *
 
 # -------------------------------
 # Registration Form
@@ -40,3 +40,18 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         exclude = ['farmer']
+
+
+# -------------------------------
+# Product Form
+# -------------------------------
+
+class BuyerProfileForm(forms.ModelForm):
+    class Meta:
+        model = BuyerModel
+        fields = [ 'gender', 'state', 'adress', 'phone']
+        widgets = {
+            'gender': forms.Select(attrs={'class': 'form-select'}),
+            'state': forms.Select(attrs={'class': 'form-select'}),
+            'adress': forms.Textarea(attrs={'rows': 3}),
+        }

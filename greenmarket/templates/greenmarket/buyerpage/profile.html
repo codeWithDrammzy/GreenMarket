@@ -1,0 +1,30 @@
+{% extends 'greenMarket/bmain.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Profile | GreenMarket{% endblock %}
+{% block header_title %}Update Your Profile{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
+  <h2 class="text-xl font-bold text-gray-800 mb-4">👤 Profile Info</h2>
+
+  <form method="post">
+    {% csrf_token %}
+   <div class="bg-gray-50 border border-gray-200 rounded-md p-4 mb-6">
+    <p class="text-sm text-gray-600 mb-1">
+      <strong>Full Name:</strong> {{ request.user.first_name }} {{ request.user.last_name }}
+    </p>
+    <p class="text-sm text-gray-600 mb-1">
+      <strong>Email:</strong> {{ request.user.email }}
+    </p>
+    <p class="text-sm text-gray-600">
+      <strong>Phone:</strong> {{ request.user.buyermodel.phone|default:"Not set" }}
+    </p>
+  </div>
+    {{form|crispy}}
+
+    <button type="submit" class="w-full bg-green-700 text-white py-2 rounded hover:bg-green-800">
+      Save Profile
+    </button>
+  </form>
+</div>
+{% endblock %}

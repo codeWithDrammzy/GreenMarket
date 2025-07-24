@@ -22,6 +22,17 @@ urlpatterns = [
     path('buyer-dashboard', views.buyer_dashboard, name='buyer-dashboard'),
     path('market-place', views.market_place, name='market-place'),
     path('my-order', views.my_order, name='my-order'),
+    path('check-out', views.check_out, name='check-out'),
+    path('profile', views.buyer_prof, name="profile"),
+
+    path('add-to-cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
     
+
+
+
+    path('cart-increase/<int:product_id>/', views.increase_cart_item, name='cart-increase'),
+    path('cart-decrease/<int:product_id>/', views.decrease_cart_item, name='cart-decrease'),
+    path('confirm-payment', views.confirm_payment, name='confirm-payment'),
+
 
 ]
