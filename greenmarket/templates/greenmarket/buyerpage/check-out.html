@@ -79,12 +79,20 @@
       </div>
 
       <!-- ✅ Checkout Button -->
-      <form method="post" action="{% url 'confirm-payment' %}">
+      {% comment %} <form method="post" action="{% url 'confirm-payment' %}">
         {% csrf_token %}
         <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded transition">
           Confirm and Pay
         </button>
-      </form>
+      </form> {% endcomment %}
+      <!-- ✅ Send Purchase Request Button -->
+    <form method="post" action="{% url 'send-order-request' %}">
+      {% csrf_token %}
+      <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded transition">
+        Send Purchase Request
+      </button>
+    </form>
+
 
     {% else %}
       <p class="text-gray-500 text-sm">Your cart is empty.</p>

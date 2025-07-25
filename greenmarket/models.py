@@ -113,15 +113,29 @@ class Product(models.Model):
 # ----------------------------
 # Order Model
 # ----------------------------
+from django.db import models
+from django.utils import timezone
+import uuid
+
 class Order(models.Model):
+    ORDER_STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+        ('paid', 'Paid'),
+    )
+
     buyer = models.ForeignKey(BuyerModel, on_delete=models.CASCADE)
     order_date = models.DateTimeField(default=timezone.now)
     is_paid = models.BooleanField(default=False)
     is_delivered = models.BooleanField(default=False)
+    status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default='pending')  # ✅ Make sure this line exists
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    order_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     def __str__(self):
-        return f"Order #{self.id} by {self.buyer.user.get_full_name()}"
+        return f"Order #{self.order_id} by {self.buyer.user.get_full_name()}"
+
     
 
 # ----------------------------

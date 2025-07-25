@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_tailwind",
     'widget_tweaks',
+    'django.contrib.humanize',
+
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"

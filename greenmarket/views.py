@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from decimal import Decimal
 
 from .models import *
 from .forms import *
@@ -151,9 +152,15 @@ def market_place(request):
     })
 
 
+from django.utils.timezone import localtime
+
 @login_required(login_url='login')
 def my_order(request):
-    return render(request, 'greenmarket/buyerpage/my-order.html')
+    buyer = request.user.buyermodel
+    orders = Order.objects.filter(buyer=buyer).order_by('-order_date')
+    context ={'orders': orders}
+    return render(request, 'greenmarket/buyerpage/my-order.html', context)
+
 
 
 @login_required(login_url='login')
@@ -236,9 +243,111 @@ def decrease_cart_item(request, product_id):
     return redirect('check-out')
 
 
-# this is to clear the cart (asuming the payment is completed)
-def confirm_payment(request):
+from django.db import transaction
+
+@login_required(login_url='login')
+def send_order_request(request):
     if request.method == 'POST':
-        request.session['cart'] = {}  
-        request.session.modified = True  
-        return redirect('check-out') 
+        cart = request.session.get('cart', {})
+        if not cart:
+            messages.error(request, "Your cart is empty.")
+            return redirect('check-out')
+
+        buyer = request.user.buyermodel
+        products = Product.objects.filter(id__in=cart.keys())
+
+        with transaction.atomic():
+            order = Order.objects.create(buyer=buyer, status='pending')  # 🟢 PENDING for approval
+
+            total = 0
+            for product in products:
+                quantity = cart[str(product.id)]
+                price = product.price
+                OrderItem.objects.create(
+                    order=order,
+                    product=product,
+                    quantity=quantity,
+                    price=price
+                )
+                total += quantity * price
+
+            order.total_amount = total
+            order.save()
+
+            # Optional: Clear cart after sending request
+            request.session['cart'] = {}
+            request.session.modified = True
+
+        messages.success(request, "Your request has been sent to the farmer(s).")
+        return redirect('my-order')
+
+    return redirect('check-out')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# this is to clear the cart (asuming the payment is completed)
+@login_required(login_url='login')
+def confirm_payment(request):
+    cart = request.session.get('cart', {})
+    
+    # Fetch buyer model
+    try:
+        buyer = request.user.buyermodel
+    except BuyerModel.DoesNotExist:
+        messages.error(request, "Only buyers can place an order.")
+        return redirect('home')
+
+    # Fetch product info
+    products = Product.objects.filter(id__in=cart.keys())
+    if not products.exists():
+        messages.error(request, "Cart contains invalid items.")
+        return redirect('check-out')
+
+    # Create the order
+    order = Order.objects.create(
+        buyer=buyer,
+        order_date=timezone.now(),
+        total_amount=0.00,  # Will be updated below
+        is_paid=False
+    )
+
+    total = Decimal("0.00")
+
+    for product in products:
+        quantity = cart[str(product.id)]
+        total_price = quantity * product.price
+        OrderItem.objects.create(
+            order=order,
+            product=product,
+            quantity=quantity,
+            price=product.price
+        )
+        total += total_price
+
+    # Update the total amount
+    order.total_amount = total
+    order.save()
+
+    # Clear the cart
+    request.session['cart'] = {}
+    request.session.modified = True
+
+    messages.success(request, "Payment confirmed. Order placed successfully.")
+    return redirect('my-order')
+
+
+
