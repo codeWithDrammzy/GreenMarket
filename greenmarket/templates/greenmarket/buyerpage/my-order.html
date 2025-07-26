@@ -7,67 +7,58 @@
 {% endblock %}
 
 {% block content %}
+<div class="space-y-6">
+  {% if orders %}
+    {% for order in orders %}
+      <div class="bg-white rounded-lg shadow p-4">
+        <h3 class="text-md font-semibold mb-2">
+  Order #{{ forloop.counter }} — {{ order.order_id}}
+</h3>
 
-<div class="bg-white rounded-lg shadow p-4">
-  <h3 class="text-lg font-semibold mb-4">Order History</h3>
+        <div class="overflow-x-auto">
+          <div class="min-w-full text-sm text-left">
+            <div class="grid grid-cols-6 bg-green-600 text-white text-xs uppercase font-semibold px-4 py-2 rounded-t">
+              <div>Date | Time</div>
+              <div>Product</div>
+              
+              <div>Quantity</div>
+              <div>Request</div>
+              <div>Amount Total</div>
+              <div>Status</div>
+            </div>
+            {% for item in order.items.all %}
+              <div class="grid grid-cols-6 border-b hover:bg-gray-50 transition px-4 py-2 text-gray-700">
+                <div>{{ order.order_date|date:"F j, Y h:i A" }}</div> 
+                <div>
+                  <div class="font-medium">{{ item.product.name|title }}</div>
+                  <div class="text-xs text-gray-500">
+                    Farmer: {{ item.product.farmer.user.first_name }} {{ item.product.farmer.user.last_name }}<br>
+                    Contact: {{ item.product.farmer.phone }}
+                  </div>
+                </div>
+                <div>{{ item.quantity }}</div>
+                <div>
+                  {% if order.status == 'pending' %}
+                    <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs">Pending</span>
+                  {% elif order.status == 'approved' %}
+                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">Approved</span>
+                  {% elif order.status == 'delivered' %}
+                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Delivered</span>
+                  {% endif %}
+                </div>
+                <div class="font-semibold">₦{{ item.get_total_price }}</div>
+                <div><!-- Optional spacing/status duplication --></div>
+              </div>
 
-  <div class="overflow-x-auto">
-    <table class="min-w-full text-sm text-left">
-      <thead class="bg-green-600 text-white text-xs uppercase">
-        <tr>
-          <th class="px-6 py-3">Order ID</th>
-          <th class="px-6 py-3">Product</th>
-          <th class="px-6 py-3">Date</th>
-          <th class="px-6 py-3">Quantity</th>
-          <th class="px-6 py-3">Request </th>
-          <th class="px-6 py-3">Amount</th>
-        </tr>
-      </thead>
-      <tbody class="text-gray-700">
-
-        {% for order in orders %}
-        <tr class="border-b hover:bg-gray-50 transition">
-          <td class="px-6 py-4">{{ order.order_id }}</td>
-          <td class="px-6 py-4">
-            {# Replace below with your actual product info logic #}
-            {% if order.order_items.all %}
-              {{ order.order_items.all.0.product.name }}
-            {% else %}
-              N/A
-            {% endif %}
-          </td>
-          <td class="px-6 py-4">{{ order.order_date|date:"F d, Y" }}</td>
-          <td class="px-6 py-4">
-            {% if order.order_items.all %}
-              {{ order.order_items.all.0.quantity }}
-            {% else %}
-              N/A
-            {% endif %}
-          </td>
-          <td class="px-6 py-4">
-            {% if order.status == 'pending' %}
-              <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs">Pending</span>
-            {% elif order.status == 'approved' %}
-              <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">Approved</span>
-            {% elif order.status == 'rejected' %}
-              <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs">Rejected</span>
-            {% elif order.status == 'paid' %}
-              <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Paid</span>
-            {% else %}
-              <span>{{ order.status }}</span>
-            {% endif %}
-          </td>
-          <td class="px-6 py-4 font-semibold">₦{{ order.total_amount }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="6" class="px-6 py-4 text-center text-gray-500">No orders found.</td>
-        </tr>
-        {% endfor %}
-
-      </tbody>
-    </table>
-  </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="text-center text-gray-500 py-6 bg-white rounded-lg shadow">
+      You have no orders yet.
+    </div>
+  {% endif %}
 </div>
-
 {% endblock %}

@@ -7,7 +7,7 @@
 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
   <div class="bg-gradient-to-r from-green-600 to-green-400 text-white p-5 rounded-xl shadow-lg">
     <h3 class="text-sm opacity-80">Total Orders</h3>
-    <p class="text-3xl font-bold mt-1">24</p>
+    <p class="text-3xl font-bold mt-1">{{ order_count }}</p>
   </div>
   <div class="bg-gradient-to-r from-green-500 to-emerald-400 text-white p-5 rounded-xl shadow-lg">
     <h3 class="text-sm opacity-80">Delivered</h3>
@@ -15,7 +15,7 @@
   </div>
   <div class="bg-gradient-to-r from-yellow-500 to-yellow-300 text-white p-5 rounded-xl shadow-lg">
     <h3 class="text-sm opacity-80">Pending</h3>
-    <p class="text-3xl font-bold mt-1">5</p>
+    <p class="text-3xl font-bold mt-1">{{pending_orders}}</p>
   </div>
 </div>
 
@@ -24,38 +24,55 @@
   <h3 class="text-lg font-semibold mb-4">Recent Orders</h3>
   <div class="bg-white rounded-xl shadow overflow-x-auto">
     <table class="min-w-full text-sm text-left">
-      <thead class="bg-green-600 text-white text-xs uppercase">
-        <tr>
-          <th class="px-6 py-3">#</th>
-          <th class="px-6 py-3">Product</th>
-          <th class="px-6 py-3">Date</th>
-          <th class="px-6 py-3">Status</th>
-          <th class="px-6 py-3">Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="border-b hover:bg-gray-50 transition">
-          <td class="px-6 py-4">1</td>
-          <td class="px-6 py-4">Fresh Tomatoes</td>
-          <td class="px-6 py-4">July 10, 2025</td>
-          <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs">Pending</span></td>
-          <td class="px-6 py-4 font-semibold">₦2,000</td>
-        </tr>
-        <tr class="border-b hover:bg-gray-50 transition">
-          <td class="px-6 py-4">2</td>
-          <td class="px-6 py-4">Yam Tubers</td>
-          <td class="px-6 py-4">July 5, 2025</td>
-          <td class="px-6 py-4"><span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Delivered</span></td>
-          <td class="px-6 py-4 font-semibold">₦5,500</td>
-        </tr>
-        <tr class="hover:bg-gray-50 transition">
-          <td class="px-6 py-4">3</td>
-          <td class="px-6 py-4">Red Pepper</td>
-          <td class="px-6 py-4">July 1, 2025</td>
-          <td class="px-6 py-4"><span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Delivered</span></td>
-          <td class="px-6 py-4 font-semibold">₦1,200</td>
-        </tr>
-      </tbody>
+      
+  <div class="space-y-6">
+  {% if recent_orders %}
+    {% for order in recent_orders %}
+      <div class="bg-white rounded-lg shadow p-4">
+        <h3 class="text-md font-semibold mb-2">
+          Order #{{ order.order_id }} — {{ order.order_date|date:"F j, Y h:i A" }}
+        </h3>
+
+        <div class="overflow-x-auto">
+          <div class="min-w-full text-sm text-left">
+            <div class="grid grid-cols-5 bg-green-600 text-white text-xs uppercase font-semibold px-4 py-2 rounded-t">
+              <div>Product</div>
+              <div>Quantity</div>
+              <div>Status</div>
+              <div>Amount</div>
+              <div>Farmer</div>
+            </div>
+            {% for item in order.items.all %}
+              <div class="grid grid-cols-5 border-b hover:bg-gray-50 transition px-4 py-2 text-gray-700">
+                <div>{{ item.product.name }}</div>
+                <div>{{ item.quantity }}</div>
+                <div>
+                  {% if order.status == 'pending' %}
+                    <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs">Pending</span>
+                  {% elif order.status == 'approved' %}
+                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">Approved</span>
+                  {% elif order.status == 'delivered' %}
+                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Delivered</span>
+                  {% endif %}
+                </div>
+                <div class="font-semibold">₦{{ item.get_total_price }}</div>
+                <div class="text-xs text-gray-600">
+                  {{ item.product.farmer.user.first_name }} {{ item.product.farmer.user.last_name }}<br>
+                  {{ item.product.farmer.phone }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="text-center text-gray-500 py-6 bg-white rounded-lg shadow">
+      No recent orders found.
+    </div>
+  {% endif %}
+</div>
+
     </table>
   </div>
 </div>

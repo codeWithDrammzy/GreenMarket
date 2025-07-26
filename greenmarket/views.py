@@ -131,14 +131,52 @@ def delete_product(request, pk):
 
 @login_required(login_url='login')
 def farm_orders(request):
-    return render(request, 'greenmarket/farmerpage/farm-order.html')
+    farmer = request.user.farmermodel
+    my_products = Product.objects.filter(farmer=farmer)
+
+    order_items = OrderItem.objects.filter(product__in=my_products) \
+        .select_related('order', 'product', 'order__buyer__user') \
+        .order_by('-order__order_date')
+
+    context = {
+        'order_items': order_items
+    }
+    return render(request, 'greenmarket/farmerpage/farm-order.html', context)
+
+
+@login_required(login_url='login')
+def check_in(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    farmer = request.user.farmermodel
+    my_products = Product.objects.filter(farmer=farmer)
+
+    order_items = OrderItem.objects.filter(order=order, product__in=my_products) \
+    .select_related('product', 'order', 'order__buyer')
+    context = {
+        'order': order,
+        'order_items': order_items 
+    }
+
+    return render(request, 'greenmarket/farmerpage/check-in.html', context)
 
 
 # ===================== Buyer Views =====================
 
 @login_required(login_url='login')
 def buyer_dashboard(request):
-    return render(request, 'greenmarket/buyerpage/buyer-dashboard.html')
+    buyer = request.user.buyermodel
+    orders = Order.objects.filter(buyer=buyer)
+    order_count = orders.count()
+    pending_orders = Order.objects.filter(status = 'pending').count()
+    recent_orders = Order.objects.filter(buyer=buyer).order_by('-order_date')[:3]
+    context = {
+        'orders': orders,
+        'order_count': order_count,
+        'pending_orders':pending_orders,
+        'recent_orders':recent_orders
+    }
+    return render(request, 'greenmarket/buyerpage/buyer-dashboard.html', context)
+
 
 
 @login_required(login_url='login')

@@ -1,87 +1,14 @@
-{% extends 'greenMarket/bmain.html' %}
-{% load crispy_forms_tags %}
-
-{% block title %}Checkout | GreenMarket{% endblock %}
-
-{% block header_title %}
-  Checkout Summary
-{% endblock %}
-
-{% block content %}
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white shadow-md rounded-lg p-6 max-w-6xl mx-auto">
-
-  <!-- 🏠 Delivery Info -->
-  <div>
-    <h2 class="text-lg font-semibold text-gray-800 mb-4">🏠 Delivery Address</h2>
+{% for order in orders %}
+  <div class="border p-4 rounded">
+    <p>Order ID: {{ order.id }}</p>
+    <p>Status: {{ order.get_status_display }}</p>
     
-      <div class="bg-gray-50 border border-gray-200 rounded-md p-4 mb-6">
-        <p class="text-sm text-gray-600 mb-1"><strong>Full Name:</strong> {{ request.user.first_name }} {{ request.user.last_name }}</p>
-        <p class="text-sm text-gray-600 mb-1"><strong>Email:</strong> {{ request.user.email }}</p>
-        <p class="text-sm text-gray-600"><strong>Phone:</strong> {{ request.user.buyermodel.phone|default:"Not set" }}</p>
-      </div>
-
-      <div class="bg-gray-50 border border-gray-200 rounded-md p-4 mb-6">
-        {% if request.user.buyermodel.state and request.user.buyermodel.adress %}
-          <p class="text-sm text-gray-600 mb-1"><strong>State:</strong> {{ request.user.buyermodel.state }}</p>
-          <p class="text-sm text-gray-600 mb-1"><strong>Address:</strong> {{ request.user.buyermodel.adress }}</p>
-        {% else %}
-          <p class="text-red-600 text-sm font-medium">
-            🚚 Please update your profile to include your shipment address and state.
-          </p>
-        {% endif %}
-      </div>
-
-
-
-      
-  </div>
-
-  <!-- 🛒 Cart Summary -->
-  <div>
-    <h2 class="text-lg font-semibold text-gray-800 mb-4">🛒 Your Cart</h2>
-
-    {% if cart_items %}
-      <div class="space-y-4 mb-6">
-        {% for item in cart_items %}
-        <div class="flex items-center justify-between border-b pb-3">
-          <div>
-            <h4 class="text-sm font-semibold text-gray-700">{{ item.product.name }}</h4>
-            <p class="text-xs text-gray-500">Category: {{ item.product.category }}</p>
-
-            <!-- Quantity control -->
-            <div class="flex items-center mt-1 space-x-2">
-              <a href="{% url 'cart_decrease' item.product.id %}" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">-</a>
-              <span class="text-sm font-medium">{{ item.quantity }}</span>
-              <a href="{% url 'cart_increase' item.product.id %}" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">+</a>
-             
-            </div>
-          </div>
-
-          <div class="text-green-700 font-semibold text-sm whitespace-nowrap">
-            ₦{{ item.total_price }}
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-
-      <!-- 💰 Summary -->
-       
-       <div class="flex items-center justify-between text-base mt-4 font-bold">
-          <span>Total</span>
-          <span class="text-green-700">₦{{ total }}</span>
-        
-      </div>
-
-      <!-- ✅ Checkout Button -->
-      <form method="post" action="">
-        {% csrf_token %}
-        <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded transition">
-          Confirm and Pay
-        </button>
-      </form>
+    {% if order.status == "approved" %}
+      <a href="{% url 'start-payment' order.id %}" class="btn btn-success">Proceed to Payment</a>
+    {% elif order.status == "rejected" %}
+      <p class="text-red-600">Rejected: {{ order.rejection_reason }}</p>
     {% else %}
-      <p class="text-gray-500 text-sm">Your cart is empty.</p>
+      <p class="text-gray-500">Pending Approval...</p>
     {% endif %}
   </div>
-</div>
-{% endblock %}
+{% endfor %}
