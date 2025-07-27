@@ -10,8 +10,8 @@
     <p class="text-3xl font-bold mt-1">{{ order_count }}</p>
   </div>
   <div class="bg-gradient-to-r from-green-500 to-emerald-400 text-white p-5 rounded-xl shadow-lg">
-    <h3 class="text-sm opacity-80">Delivered</h3>
-    <p class="text-3xl font-bold mt-1">19</p>
+    <h3 class="text-sm opacity-80">Approved Request</h3>
+    <p class="text-3xl font-bold mt-1">{{ap_orders}} </p>
   </div>
   <div class="bg-gradient-to-r from-yellow-500 to-yellow-300 text-white p-5 rounded-xl shadow-lg">
     <h3 class="text-sm opacity-80">Pending</h3>
@@ -30,17 +30,18 @@
     {% for order in recent_orders %}
       <div class="bg-white rounded-lg shadow p-4">
         <h3 class="text-md font-semibold mb-2">
-          Order #{{ order.order_id }} — {{ order.order_date|date:"F j, Y h:i A" }}
+          Track_Id: <span class ="text-blue-600"> ( {{ order.order_id }} ) </span> — {{ order.order_date|date:"F j, Y h:i A" }}
         </h3>
 
-        <div class="overflow-x-auto">
+        <div class
+        ="overflow-x-auto">
           <div class="min-w-full text-sm text-left">
             <div class="grid grid-cols-5 bg-green-600 text-white text-xs uppercase font-semibold px-4 py-2 rounded-t">
               <div>Product</div>
               <div>Quantity</div>
               <div>Status</div>
               <div>Amount</div>
-              <div>Farmer</div>
+              <div>Make Payment</div>
             </div>
             {% for item in order.items.all %}
               <div class="grid grid-cols-5 border-b hover:bg-gray-50 transition px-4 py-2 text-gray-700">
@@ -52,10 +53,17 @@
                   {% endif %}
                 </div>
                 <div class="font-semibold">₦{{ item.get_total_price }}</div>
-                <div class="text-xs text-gray-600">
-                  {{ item.product.farmer.user.first_name }} {{ item.product.farmer.user.last_name }}<br>
-                  {{ item.product.farmer.phone }}
+
+                <div class="text-xs text-gray-600 flext justify-between space-x-4 p-2">
+                  <a href="" class="inline-block bg-orange-400 text-white text-sm font-medium py-2 px-4 rounded hover:bg-green-300 transition">
+                    Proceed
+                  </a>
+
+                  <a href="" class="inline-block bg-red-400 text-white text-sm font-medium py-2 px-4 rounded hover:bg-green-300 transition">
+                    Cancel
+                  </a>
                 </div>
+
               </div>
             {% endfor %}
           </div>

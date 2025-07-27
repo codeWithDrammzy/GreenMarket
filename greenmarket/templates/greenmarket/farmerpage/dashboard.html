@@ -14,8 +14,8 @@
         </div>
 
         <div class="bg-white p-4 rounded-lg shadow">
-          <h3 class="text-sm text-gray-500">Pending Orders</h3>
-          <p class="text-2xl font-bold text-yellow-600 mt-2">3</p>
+          <h3 class="text-sm text-gray-500">Pending Request</h3>
+          <p class="text-2xl font-bold text-yellow-600 mt-2">{{Pending_orders}} </p>
         </div>
 
         <div class="bg-white p-4 rounded-lg shadow">
@@ -27,36 +27,27 @@
 
       <!-- Recent Products -->
       <div>
-        <h3 class="text-lg font-semibold mb-4">Recent Products</h3>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          
-          <!-- Dummy Product Card -->
-          <div class="bg-white rounded shadow p-4">
-            <img src="{% static 'images/tomato.jpg' %}" alt="Tomato" class="w-full h-32 object-cover rounded">
-            <div class="mt-2">
-              <h4 class="font-semibold">Fresh Tomatoes</h4>
-              <p class="text-sm text-gray-500">₦2,000 / basket</p>
+  <div>
+      <h3 class="text-lg font-semibold mb-4">Recent Products</h3>
+      <div class="flex flex-wrap gap-6 justify-start">
+        {% for product in orders %}
+          <div class="bg-white rounded shadow p-6 flex flex-col items-center w-60">
+            <!-- Product image -->
+             {% if product.avater %}
+            <img src="{{ product.avater.url}}" alt="{{ product.name }}" class="w-full h-40 object-cover rounded" />
+            {%else%}
+            <h4 class="font-semibold text-lg">no Image available for this product</h4>
+            {%endif%}
+            <div class="mt-4 flex just-between space-x-4 mx-0">
+              <h4 class="font-semibold text-lg">{{ product.name }}</h4>
+              <p class="text-md text-gray-600 mt-1">${{ product.price }}</p>
             </div>
           </div>
-
-          <div class="bg-white rounded shadow p-4">
-            <img src="{% static 'images/yam.jpg' %}" alt="Yam" class="w-full h-32 object-cover rounded">
-            <div class="mt-2">
-              <h4 class="font-semibold">Yam Tubers</h4>
-              <p class="text-sm text-gray-500">₦5,500 / 5pcs</p>
-            </div>
-          </div>
-
-          <div class="bg-white rounded shadow p-4">
-            <img src="{% static 'images/pepper.jpg' %}" alt="Pepper" class="w-full h-32 object-cover rounded">
-            <div class="mt-2">
-              <h4 class="font-semibold">Red Pepper</h4>
-              <p class="text-sm text-gray-500">₦1,200 / bag</p>
-            </div>
-          </div>
-
-        </div>
+        {% endfor %}
       </div>
+    </div>
+
+
 
     </main>
 

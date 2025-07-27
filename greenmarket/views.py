@@ -94,7 +94,14 @@ def home(request):
 def farmers_dashboard(request):
     farmer = request.user.farmermodel
     farm_items = Product.objects.filter(farmer=farmer).count()
-    return render(request, 'greenmarket/farmerpage/dashboard.html', {'farm_items': farm_items})
+    Pending_orders = Order.objects.filter(status = 'pending').count()
+    orders = Product.objects.all()
+
+    context ={'farm_items': farm_items,
+              'Pending_orders':Pending_orders,
+              'orders': orders
+              }
+    return render(request, 'greenmarket/farmerpage/dashboard.html', context)
 
 
 @login_required(login_url='login')
@@ -199,11 +206,13 @@ def buyer_dashboard(request):
     order_count = orders.count()
     pending_orders = Order.objects.filter(status = 'pending').count()
     recent_orders = Order.objects.filter(status='approved').order_by('-order_date')
+    ap_orders = Order.objects.filter(status='approved').order_by('-order_date').count()
     context = {
         'orders': orders,
         'order_count': order_count,
         'pending_orders':pending_orders,
-        'recent_orders':recent_orders
+        'recent_orders':recent_orders,
+        'ap_orders':ap_orders
     }
     return render(request, 'greenmarket/buyerpage/buyer-dashboard.html', context)
 
