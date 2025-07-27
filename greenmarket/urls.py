@@ -19,6 +19,9 @@ urlpatterns = [
 
     path('check-in/<int:pk>', views.check_in, name='check-in'),
 
+    path('approve-order/<int:pk>', views.approve_order, name='approve-order'),
+    path('reject-order/<int:pk>', views.reject_order, name='reject-order'),
+
     # ============ Buyer page ===========
 
     path('buyer-dashboard', views.buyer_dashboard, name='buyer-dashboard'),

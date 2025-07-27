@@ -44,15 +44,11 @@
             </div>
             {% for item in order.items.all %}
               <div class="grid grid-cols-5 border-b hover:bg-gray-50 transition px-4 py-2 text-gray-700">
-                <div>{{ item.product.name }}</div>
+                <div>{{ item.product.name|title }}</div>
                 <div>{{ item.quantity }}</div>
                 <div>
-                  {% if order.status == 'pending' %}
-                    <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs">Pending</span>
-                  {% elif order.status == 'approved' %}
+                  {% if order.status == 'approved' %}
                     <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">Approved</span>
-                  {% elif order.status == 'delivered' %}
-                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">Delivered</span>
                   {% endif %}
                 </div>
                 <div class="font-semibold">₦{{ item.get_total_price }}</div>

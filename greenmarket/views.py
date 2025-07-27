@@ -159,6 +159,36 @@ def check_in(request, pk):
 
     return render(request, 'greenmarket/farmerpage/check-in.html', context)
 
+@login_required(login_url='login')
+def approve_order(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+
+    if order.status != 'pending':
+        messages.warning(request, "Only pending orders can be approved.")
+    else:
+        order.status = 'approved'
+        order.save()
+        messages.success(request, f"Order #{order.order_id} approved.")
+
+    return redirect('check-in', pk=pk)
+
+
+
+@login_required(login_url='login')
+def reject_order(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+
+    if order.status != 'pending':
+        messages.warning(request, "Only pending orders can be rejected.")
+    else:
+        order.status = 'rejected'
+        order.save()
+        messages.success(request, f"Order #{order.order_id} rejected.")
+
+    return redirect('check-in', pk=pk)
+ 
+
+
 
 # ===================== Buyer Views =====================
 
@@ -168,7 +198,7 @@ def buyer_dashboard(request):
     orders = Order.objects.filter(buyer=buyer)
     order_count = orders.count()
     pending_orders = Order.objects.filter(status = 'pending').count()
-    recent_orders = Order.objects.filter(buyer=buyer).order_by('-order_date')[:3]
+    recent_orders = Order.objects.filter(status='approved').order_by('-order_date')
     context = {
         'orders': orders,
         'order_count': order_count,
